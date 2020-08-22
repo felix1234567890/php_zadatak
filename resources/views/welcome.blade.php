@@ -15,15 +15,8 @@
 
 <body>
 
-    <div class="container-md">
-        <div class="input-group flex-nowrap">
-            <input type="text" class="form-control" placeholder="Username" aria-label="Username"
-                aria-describedby="addon-wrapping">
-            <span class="input-group-text" id="">
-                <i class="fa fa-search"></i>
-            </span>
-        </div>
-
+    <div class="container-md" id="app">
+<search-component></search-component>
         <div class="row">
             @foreach($items as $item)
             <div class="col-md-4 mt-5">
@@ -43,8 +36,12 @@
             </div>
             @endforeach
         </div>
+        <div id="app">
+        <example-component></example-component>
+        </div>
+     
     </div>
-
+<script src="{{asset('js/app.js') }}"></script>
 </body>
 
 </html>
