@@ -72,11 +72,31 @@ class HomeController extends Controller
 
         return view('home',);
     }
-    public function show($itemId)
-    {
-        $movie = Http::withToken(env('API_TOKEN'))->get($this->baseUrl . 'movie/' . $itemId)->json();
-        return view('show', compact('movie'));
-    }
+    // public function show($itemId)
+    // {
+    //     $movie = Http::withToken(env('API_TOKEN'))->get($this->baseUrl . 'movie/' . $itemId)->json();
+    //     return view('show', compact('movie'));
+    // }
+
+    /**
+     * @OA\Get(
+     * path="/api/search",
+     * summary="Search",
+     * tags={"HomeController API routes"},
+     * description="Search for movies and tv-shows or indiviadually",
+     * @OA\Parameter(
+     *    description="Search term",
+     *    in="query",
+     *    name="searchTerm",
+     *    required=true,
+     *    example="Friends",
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Data retrieved from an external API",
+     * )
+     * )
+     */
     public function search(Request $request)
     {
         $searchTerm = $request->query('searchTerm');
@@ -95,5 +115,28 @@ class HomeController extends Controller
             default:
                 break;
         }
+    }
+    /**
+     * @OA\Get(
+     * path="/api/details/{id}",
+     * summary="Movie-show details",
+     * tags={"HomeController API routes"},
+     * description="Details of a particular movie or tv-show",
+     * @OA\Parameter(
+     *    description="Id of movie/show",
+     *    in="path",
+     *    name="id",
+     *    required=true,
+     *    example="176890",
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Item retrieved from an external API",
+     * )
+     * )
+     */
+    public function findDetails($id)
+    {
+        return Http::withToken(env('API_TOKEN'))->get($this->baseUrl . "movie/" . $id)->json();
     }
 }

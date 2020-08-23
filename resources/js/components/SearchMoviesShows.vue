@@ -43,7 +43,9 @@
                         />
                     </router-link>
                     <div class="card-body">
-                        <h4>{{ item.type }}</h4>
+                        <router-link :to="`/show/${item.id}`">
+                            <h4>{{ item.type }}</h4>
+                        </router-link>
                         <a>
                             <h5 class="card-title">
                                 {{ item.title || item.name }}

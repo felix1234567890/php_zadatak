@@ -1,0 +1,60 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Movie-TV Show Finder API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/search": {
+            "get": {
+                "tags": [
+                    "HomeController API routes"
+                ],
+                "summary": "Search",
+                "description": "Search for movies and tv-shows or indiviadually",
+                "operationId": "App\\Http\\Controllers\\HomeController::search",
+                "parameters": [
+                    {
+                        "name": "searchTerm",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": true,
+                        "example": "Friends"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data retrieved from an external API"
+                    }
+                }
+            }
+        },
+        "/api/details/{id}": {
+            "get": {
+                "tags": [
+                    "HomeController API routes"
+                ],
+                "summary": "Movie-show details",
+                "description": "Details of a particular movie or tv-show",
+                "operationId": "App\\Http\\Controllers\\HomeController::findDetails",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id of movie/show",
+                        "required": true,
+                        "example": "176890"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item retrieved from an external API"
+                    }
+                }
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}

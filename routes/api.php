@@ -18,3 +18,4 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 Route::get('/search', 'HomeController@search');
+Route::get('/details/{id}', 'HomeController@findDetails');

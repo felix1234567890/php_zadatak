@@ -1912,7 +1912,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      movie: {}
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    axios.get("/api/details/".concat(this.$route.params.id)).then(function (response) {
+      response.data.genres = response.data.genres.map(function (genre) {
+        return genre.name;
+      });
+      _this.movie = response.data;
+    });
+  }
+});
 
 /***/ }),
 
@@ -1925,6 +1961,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -10221,7 +10259,37 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("h1", [_vm._v("Hello " + _vm._s(_vm.$route.params.id))])
+  return _c("div", { staticClass: "row" }, [
+    _c(
+      "span",
+      { staticClass: "py-3" },
+      [
+        _c("router-link", { attrs: { to: "/" } }, [
+          _c("i", { staticClass: "fas fa-arrow-circle-left fa-3x" })
+        ])
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-md-6" }, [
+      _c("img", {
+        staticClass: "h-100 w-100",
+        attrs: {
+          src: _vm.movie.poster_path
+            ? "https://image.tmdb.org/t/p/w500/" + _vm.movie.poster_path
+            : "http://via.placeholder.com/500x750"
+        }
+      })
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-md-6" }, [
+      _c("h4", [
+        _vm._v(
+          "Genres: " + _vm._s(_vm.movie.genres && _vm.movie.genres.join(", "))
+        )
+      ])
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -10347,27 +10415,36 @@ var render = function() {
                       })
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "card-body" }, [
-                      _c("h4", [_vm._v(_vm._s(item.type))]),
-                      _vm._v(" "),
-                      _c("a", [
-                        _c("h5", { staticClass: "card-title" }, [
+                    _c(
+                      "div",
+                      { staticClass: "card-body" },
+                      [
+                        _c(
+                          "router-link",
+                          { attrs: { to: "/show/" + item.id } },
+                          [_c("h4", [_vm._v(_vm._s(item.type))])]
+                        ),
+                        _vm._v(" "),
+                        _c("a", [
+                          _c("h5", { staticClass: "card-title" }, [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(item.title || item.name) +
+                                "\n                        "
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "card-text" }, [
                           _vm._v(
-                            "\n                            " +
-                              _vm._s(item.title || item.name) +
-                              "\n                        "
+                            "\n                        " +
+                              _vm._s(_vm.shortenDescription(item.overview)) +
+                              "\n                    "
                           )
                         ])
-                      ]),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "card-text" }, [
-                        _vm._v(
-                          "\n                        " +
-                            _vm._s(_vm.shortenDescription(item.overview)) +
-                            "\n                    "
-                        )
-                      ])
-                    ])
+                      ],
+                      1
+                    )
                   ],
                   1
                 )
