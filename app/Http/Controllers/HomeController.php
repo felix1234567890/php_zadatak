@@ -34,6 +34,10 @@ class HomeController extends Controller
      * @OA\Response(
      * response=200,
      * description="Data retrieved from an external API",
+     * @OA\JsonContent(
+     *  @OA\Property(property="movie-show",type="array",
+     * @OA\Items(ref="#/components/schemas/MovieShow")),
+     * )
      * )
      * )
      */
@@ -101,7 +105,7 @@ class HomeController extends Controller
      * @OA\Get(
      * path="/api/details/{id}",
      * summary="Movie-show details",
-     * `tags={"HomeController API routes"},
+     * tags={"HomeController API routes"},
      * description="Details of a particular movie or tv-show",
      * @OA\Parameter(
      *    description="Id of movie/show",

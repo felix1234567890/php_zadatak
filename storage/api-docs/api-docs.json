@@ -24,7 +24,22 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Data retrieved from an external API"
+                        "description": "Data retrieved from an external API",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "movie-show": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/MovieShow"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -50,6 +65,78 @@
                     "200": {
                         "description": "Item retrieved from an external API"
                     }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "MovieShow": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "title": {
+                        "description": "Title of a movie or show",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "Description of a movie or show",
+                        "type": "string"
+                    },
+                    "release_date": {
+                        "description": "Release date of a movie or show",
+                        "type": "string"
+                    },
+                    "vote_average": {
+                        "description": "Average vote of a movie or show",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "poster_path": {
+                        "description": "Path of a poster image",
+                        "type": "string"
+                    },
+                    "popularity": {
+                        "description": "Popularity of a particular movie or show",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "language": {
+                        "description": "Spoken language of a movie or show",
+                        "type": "string"
+                    },
+                    "original_title": {
+                        "description": "Title in native language",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "Either movie or tv-show",
+                        "type": "string",
+                        "enum": "[movie,tv-show]"
+                    },
+                    "api_Id": {
+                        "description": "Id of a movie or show from external API",
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "description": "Initial creation timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "updated_at": {
+                        "description": "Last update timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "MovieShow"
                 }
             }
         }
