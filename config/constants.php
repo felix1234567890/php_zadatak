@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'popular_movies' => 'https://api.themoviedb.org/3/movie/popular',
-    'popular_tv_shows' => 'https://api.themoviedb.org/3/tv/popular',
-    'genres' => 'https://api.themoviedb.org/3/genre/movie/list'
+    'popular_movies' => 'movie/popular',
+    'popular_tv_shows' => 'tv/popular',
+    'genres' => 'genre/movie/list',
+    'search_movies' => 'search/movie?query='
 ];

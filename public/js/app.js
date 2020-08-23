@@ -1935,16 +1935,71 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       searchTerm: "",
-      type: "0"
+      type: "0",
+      searchData: []
     };
   },
   watch: {
     searchTerm: function searchTerm(value) {
-      console.log(value);
+      var _this = this;
+
+      if (value.length < 3) return;
+      axios.get("/api/search", {
+        params: {
+          searchTerm: this.searchTerm
+        }
+      }).then(function (response) {
+        console.log(response.data);
+        _this.searchData = response.data;
+      })["catch"](function (error) {
+        return console.log(error);
+      });
+    }
+  },
+  methods: {
+    shortenDescription: function shortenDescription(text) {
+      var len = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 200;
+      if (text.length > len) return "".concat(text.slice(0, len), "...");
+      return text;
     }
   }
 });
@@ -20368,73 +20423,133 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "input-group flex-nowrap" }, [
-    _c("input", {
-      directives: [
-        {
-          name: "model",
-          rawName: "v-model",
-          value: _vm.searchTerm,
-          expression: "searchTerm"
-        }
-      ],
-      staticClass: "form-control",
-      attrs: {
-        type: "text",
-        placeholder: "Search movies or tv shows",
-        "aria-label": "Username",
-        "aria-describedby": "addon-wrapping"
-      },
-      domProps: { value: _vm.searchTerm },
-      on: {
-        input: function($event) {
-          if ($event.target.composing) {
-            return
-          }
-          _vm.searchTerm = $event.target.value
-        }
-      }
-    }),
-    _vm._v(" "),
-    _c(
-      "select",
-      {
+  return _c("div", [
+    _c("div", { staticClass: "input-group flex-nowrap" }, [
+      _c("input", {
         directives: [
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.type,
-            expression: "type"
+            value: _vm.searchTerm,
+            expression: "searchTerm"
           }
         ],
-        staticClass: "form-select input-group-text",
-        attrs: { "aria-label": "Default select example" },
+        staticClass: "form-control",
+        attrs: {
+          type: "text",
+          placeholder: "Search movies or tv shows",
+          "aria-label": "Username",
+          "aria-describedby": "addon-wrapping"
+        },
+        domProps: { value: _vm.searchTerm },
         on: {
-          change: function($event) {
-            var $$selectedVal = Array.prototype.filter
-              .call($event.target.options, function(o) {
-                return o.selected
-              })
-              .map(function(o) {
-                var val = "_value" in o ? o._value : o.value
-                return val
-              })
-            _vm.type = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.searchTerm = $event.target.value
           }
         }
-      },
-      [
-        _c("option", { attrs: { value: "0", selected: "" } }, [
-          _vm._v("Movies + TV-Shows")
-        ]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "1" } }, [_vm._v("Movies")]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "2" } }, [_vm._v("Tv-Shows")])
-      ]
-    ),
+      }),
+      _vm._v(" "),
+      _c(
+        "select",
+        {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.type,
+              expression: "type"
+            }
+          ],
+          staticClass: "form-select input-group-text",
+          attrs: { "aria-label": "Default select example" },
+          on: {
+            change: function($event) {
+              var $$selectedVal = Array.prototype.filter
+                .call($event.target.options, function(o) {
+                  return o.selected
+                })
+                .map(function(o) {
+                  var val = "_value" in o ? o._value : o.value
+                  return val
+                })
+              _vm.type = $event.target.multiple
+                ? $$selectedVal
+                : $$selectedVal[0]
+            }
+          }
+        },
+        [
+          _c("option", { attrs: { value: "0", selected: "" } }, [
+            _vm._v("Movies + TV-Shows")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "1" } }, [_vm._v("Movies")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "2" } }, [_vm._v("Tv-Shows")])
+        ]
+      ),
+      _vm._v(" "),
+      _vm._m(0)
+    ]),
     _vm._v(" "),
-    _vm._m(0)
+    _vm.searchData.length === 0
+      ? _c("div", [_c("p", [_vm._v("No items to show")])])
+      : _c(
+          "div",
+          { staticClass: "row" },
+          _vm._l(_vm.searchData, function(item) {
+            return _c(
+              "div",
+              {
+                key: item.id,
+                staticClass: "col-md-4 col-sm-6 align-self-center"
+              },
+              [
+                _c(
+                  "div",
+                  { staticClass: "card", staticStyle: { width: "20rem" } },
+                  [
+                    _c("a", { attrs: { href: "/show/" + item.id } }, [
+                      _c("img", {
+                        staticClass: "card-img-top",
+                        attrs: {
+                          src: item.poster_path
+                            ? "https://image.tmdb.org/t/p/w500/" +
+                              item.poster_path
+                            : "http://via.placeholder.com/500x750"
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card-body" }, [
+                      _c("a", [
+                        _c("h5", { staticClass: "card-title" }, [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(item.title) +
+                              "\n                        "
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "card-text" }, [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(_vm.shortenDescription(item.overview)) +
+                            "\n                    "
+                        )
+                      ])
+                    ])
+                  ]
+                )
+              ]
+            )
+          }),
+          0
+        )
   ])
 }
 var staticRenderFns = [
