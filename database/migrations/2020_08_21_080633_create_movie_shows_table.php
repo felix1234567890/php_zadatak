@@ -17,14 +17,14 @@ class CreateMovieShowsTable extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->date('release_date');
+            $table->string('release_date')->nullable();
             $table->float('vote_average', 8, 2);
             $table->string('poster_path');
-            $table->float('popularity',8,3);
-            $table->string('genres')->nullable();
-            $table->string('language')->nullable();
+            $table->float('popularity', 8, 3);
+            $table->string('language');
             $table->string('original_title');
             $table->enum('type', ['movie', 'tv-show']);
+            $table->integer('api_Id');
             $table->timestamps();
         });
     }

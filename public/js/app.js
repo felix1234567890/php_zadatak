@@ -1932,6 +1932,58 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1942,8 +1994,15 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     axios.get("/api/details/".concat(this.$route.params.id)).then(function (response) {
+      console.log(response.data);
       response.data.genres = response.data.genres.map(function (genre) {
         return genre.name;
+      });
+      response.data.production_companies = response.data.production_companies.map(function (company) {
+        return company.name;
+      });
+      response.data.production_countries = response.data.production_countries.map(function (country) {
+        return country.name;
       });
       _this.movie = response.data;
     });
@@ -2014,16 +2073,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2032,15 +2081,49 @@ __webpack_require__.r(__webpack_exports__);
       searchData: []
     };
   },
-  watch: {
-    searchTerm: function searchTerm(value) {
+  // watch: {
+  // searchTerm(value) {
+  //     if (value.length < 3) {
+  //         this.searchData = [];
+  //         return;
+  //     }
+  //     axios
+  //         .get("/api/search", {
+  //             params: { searchTerm: this.searchTerm, type: this.type }
+  //         })
+  //         .then(response => {
+  //             console.log(response.data);
+  //             this.searchData = response.data;
+  //         })
+  //         .catch(error => console.log(error));
+  // },
+  // type(value) {
+  //     if (this.searchTerm.length < 3) {
+  //         this.searchData = [];
+  //         return;
+  //     }
+  //     axios
+  //         .get("/api/search", {
+  //             params: { searchTerm: this.searchTerm, type: this.type }
+  //         })
+  //         .then(response => {
+  //             console.log(response.datad);
+  //             this.searchData = response.data;
+  //         })
+  //         .catch(error => console.log(error));
+  // }
+  // },
+  methods: {
+    shortenDescription: function shortenDescription(text) {
+      var len = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 200;
+      console.log(text);
+      if (text.length > len) return "".concat(text.slice(0, len), "...");
+      return text;
+    },
+    searchForData: function searchForData() {
       var _this = this;
 
-      if (value.length < 3) {
-        this.searchData = [];
-        return;
-      }
-
+      if (this.searchTerm.length < 3) alert("Please provide at least 3 letters");
       axios.get("/api/search", {
         params: {
           searchTerm: this.searchTerm,
@@ -2051,32 +2134,6 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         return console.log(error);
       });
-    },
-    type: function type(value) {
-      var _this2 = this;
-
-      if (this.searchTerm.length < 3) {
-        this.searchData = [];
-        return;
-      }
-
-      axios.get("/api/search", {
-        params: {
-          searchTerm: this.searchTerm,
-          type: this.type
-        }
-      }).then(function (response) {
-        _this2.searchData = response.data;
-      })["catch"](function (error) {
-        return console.log(error);
-      });
-    }
-  },
-  methods: {
-    shortenDescription: function shortenDescription(text) {
-      var len = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 200;
-      if (text.length > len) return "".concat(text.slice(0, len), "...");
-      return text;
     }
   }
 });
@@ -10273,7 +10330,6 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "col-md-6" }, [
       _c("img", {
-        staticClass: "h-100 w-100",
         attrs: {
           src: _vm.movie.poster_path
             ? "https://image.tmdb.org/t/p/w500/" + _vm.movie.poster_path
@@ -10283,9 +10339,92 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "col-md-6" }, [
-      _c("h4", [
+      _c("p", [
+        _c("strong", [_vm._v("Title:")]),
+        _vm._v("\n            " + _vm._s(_vm.movie.title) + "\n        ")
+      ]),
+      _vm._v(" "),
+      _vm.movie.title !== _vm.movie.original_title
+        ? _c("div", [
+            _c("p", [
+              _c("strong", [_vm._v("Original title:")]),
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.movie.original_title) +
+                  "\n            "
+              )
+            ])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.movie.original_language !== "en"
+        ? _c("div", [
+            _c("p", [
+              _c("strong", [_vm._v("Original language:")]),
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.movie.original_language) +
+                  "\n            "
+              )
+            ])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("p", [
+        _c("strong", [_vm._v("Description:")]),
+        _vm._v("\n            " + _vm._s(_vm.movie.overview) + "\n        ")
+      ]),
+      _vm._v(" "),
+      _c("p", [
+        _c("strong", [_vm._v("Genres:")]),
         _vm._v(
-          "Genres: " + _vm._s(_vm.movie.genres && _vm.movie.genres.join(", "))
+          "\n            " +
+            _vm._s(_vm.movie.genres && _vm.movie.genres.join(", ")) +
+            "\n        "
+        )
+      ]),
+      _vm._v(" "),
+      _c("p", [
+        _c("strong", [_vm._v("Release date:")]),
+        _vm._v("\n            " + _vm._s(_vm.movie.release_date) + "\n        ")
+      ]),
+      _vm._v(" "),
+      _c("p", [
+        _c("strong", [_vm._v("Runtime:")]),
+        _vm._v("\n            " + _vm._s(_vm.movie.runtime) + " mins\n        ")
+      ]),
+      _vm._v(" "),
+      _c("p", [
+        _c("strong", [_vm._v("Vote average:")]),
+        _vm._v("\n            " + _vm._s(_vm.movie.vote_average) + "\n        ")
+      ]),
+      _vm._v(" "),
+      _c("p", [
+        _c("strong", [_vm._v("Popularity:")]),
+        _vm._v("\n            " + _vm._s(_vm.movie.popularity) + "\n        ")
+      ]),
+      _vm._v(" "),
+      _c("p", [
+        _c("strong", [_vm._v("Production companies:")]),
+        _vm._v(
+          "\n            " +
+            _vm._s(
+              _vm.movie.production_companies &&
+                _vm.movie.production_companies.join(", ")
+            ) +
+            "\n        "
+        )
+      ]),
+      _vm._v(" "),
+      _c("p", [
+        _c("strong", [_vm._v("Production countries:")]),
+        _vm._v(
+          "\n            " +
+            _vm._s(
+              _vm.movie.production_countries &&
+                _vm.movie.production_countries.join(", ")
+            ) +
+            "\n        "
         )
       ])
     ])
@@ -10314,7 +10453,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "input-group flex-nowrap" }, [
+    _c("div", { staticClass: "input-group flex-nowrap py-5" }, [
       _c("input", {
         directives: [
           {
@@ -10383,7 +10522,11 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._m(0)
+      _c(
+        "span",
+        { staticClass: "input-group-text", on: { click: _vm.searchForData } },
+        [_c("i", { staticClass: "fa fa-search" })]
+      )
     ]),
     _vm._v(" "),
     _vm.searchData.length === 0
@@ -10406,12 +10549,7 @@ var render = function() {
                     _c("router-link", { attrs: { to: "/show/" + item.id } }, [
                       _c("img", {
                         staticClass: "card-img-top",
-                        attrs: {
-                          src: item.poster_path
-                            ? "https://image.tmdb.org/t/p/w500/" +
-                              item.poster_path
-                            : "http://via.placeholder.com/500x750"
-                        }
+                        attrs: { src: item.poster_path }
                       })
                     ]),
                     _vm._v(" "),
@@ -10422,23 +10560,21 @@ var render = function() {
                         _c(
                           "router-link",
                           { attrs: { to: "/show/" + item.id } },
-                          [_c("h4", [_vm._v(_vm._s(item.type))])]
+                          [
+                            _c("h5", { staticClass: "card-title" }, [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(item.title || item.name) +
+                                  "\n                        "
+                              )
+                            ])
+                          ]
                         ),
-                        _vm._v(" "),
-                        _c("a", [
-                          _c("h5", { staticClass: "card-title" }, [
-                            _vm._v(
-                              "\n                            " +
-                                _vm._s(item.title || item.name) +
-                                "\n                        "
-                            )
-                          ])
-                        ]),
                         _vm._v(" "),
                         _c("p", { staticClass: "card-text" }, [
                           _vm._v(
                             "\n                        " +
-                              _vm._s(_vm.shortenDescription(item.overview)) +
+                              _vm._s(_vm.shortenDescription(item.description)) +
                               "\n                    "
                           )
                         ])
@@ -10455,16 +10591,7 @@ var render = function() {
         )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "input-group-text" }, [
-      _c("i", { staticClass: "fa fa-search" })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

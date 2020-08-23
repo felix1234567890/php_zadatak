@@ -9,6 +9,7 @@
 </head>
 <body>
     <div class="container-md" id="app">
+        <h1 class="text-center mt-5">Movie-TV Show Finder</h1>
         @yield('content')
     </div>
     <script src="{{asset('js/app.js') }}"></script>
