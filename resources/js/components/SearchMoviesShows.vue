@@ -10,15 +10,13 @@
                 v-model="searchTerm"
             />
 
-            <select
-                class="form-select input-group-text"
-                aria-label="Default select example"
-                v-model="type"
-            >
-                <option value="0" selected>Movies + TV-Shows</option>
-                <option value="1">Movies</option>
-                <option value="2">Tv-Shows</option>
-            </select>
+            <span class="input-group-text">
+                <select class="form-select" v-model="type">
+                    <option value="both" selected>Movies + TV-Shows</option>
+                    <option value="movies">Movies</option>
+                    <option value="shows">Tv-Shows</option>
+                </select>
+            </span>
 
             <span class="input-group-text">
                 <i class="fa fa-search"></i>
@@ -33,8 +31,8 @@
                 v-for="item in searchData"
                 :key="item.id"
             >
-                <div class="card" style="width: 20rem;">
-                    <a :href="`/show/${item.id}`">
+                <div class="card h-100 m-2">
+                    <router-link :to="`/show/${item.id}`">
                         <img
                             :src="
                                 item.poster_path
@@ -43,11 +41,12 @@
                             "
                             class="card-img-top"
                         />
-                    </a>
+                    </router-link>
                     <div class="card-body">
+                        <h4>{{ item.type }}</h4>
                         <a>
                             <h5 class="card-title">
-                                {{ item.title }}
+                                {{ item.title || item.name }}
                             </h5>
                         </a>
                         <p class="card-text">
@@ -65,19 +64,35 @@ export default {
     data() {
         return {
             searchTerm: "",
-            type: "0",
+            type: "both",
             searchData: []
         };
     },
     watch: {
         searchTerm(value) {
-            if (value.length < 3) return;
+            if (value.length < 3) {
+                this.searchData = [];
+                return;
+            }
             axios
                 .get("/api/search", {
-                    params: { searchTerm: this.searchTerm }
+                    params: { searchTerm: this.searchTerm, type: this.type }
                 })
                 .then(response => {
-                    console.log(response.data);
+                    this.searchData = response.data;
+                })
+                .catch(error => console.log(error));
+        },
+        type(value) {
+            if (this.searchTerm.length < 3) {
+                this.searchData = [];
+                return;
+            }
+            axios
+                .get("/api/search", {
+                    params: { searchTerm: this.searchTerm, type: this.type }
+                })
+                .then(response => {
                     this.searchData = response.data;
                 })
                 .catch(error => console.log(error));

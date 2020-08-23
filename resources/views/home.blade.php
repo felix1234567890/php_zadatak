@@ -1,4 +1,4 @@
 @extends('layouts.main')
 @section('content')
-<search-component></search-component>
+<router-view></router-view>
 @endsection

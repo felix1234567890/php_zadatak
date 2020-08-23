@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
-use Symfony\Component\HttpFoundation\Response;
 
 class HomeController extends Controller
 {
@@ -81,7 +80,20 @@ class HomeController extends Controller
     public function search(Request $request)
     {
         $searchTerm = $request->query('searchTerm');
-        $searchItems = Http::withToken(env('API_TOKEN'))->get($this->baseUrl . Config::get('constants.search_movies') . $searchTerm)->json();
-        return $searchItems['results'];
+        $type = $request->query('type');
+        switch ($type) {
+            case "both":
+                $searchMovies = Http::withToken(env('API_TOKEN'))->get($this->baseUrl . Config::get('constants.search_movies') . $searchTerm)->json();
+                $searchTVShows = Http::withToken(env('API_TOKEN'))->get($this->baseUrl . Config::get('constants.search_shows') . $searchTerm)->json();
+                $searchItems = array_merge($searchMovies['results'], $searchTVShows['results']);
+                shuffle($searchItems);
+                return $searchItems;
+            case "movies":
+                return Http::withToken(env('API_TOKEN'))->get($this->baseUrl . Config::get('constants.search_movies') . $searchTerm)->json()['results'];
+            case "shows":
+                return Http::withToken(env('API_TOKEN'))->get($this->baseUrl . Config::get('constants.search_shows') . $searchTerm)->json()['results'];
+            default:
+                break;
+        }
     }
 }

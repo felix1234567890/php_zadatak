@@ -5,9 +5,10 @@
  */
 
 require("./bootstrap");
+import VueRouter from "vue-router";
 
 window.Vue = require("vue");
-
+Vue.use(VueRouter);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -23,6 +24,24 @@ Vue.component(
     "search-component",
     require("./components/SearchMoviesShows.vue").default
 );
+Vue.component(
+    "movie-detail-component",
+    require("./components/MovieDetailComponent.vue").default
+);
+const routes = [
+    {
+        path: "/",
+        component: require("./components/SearchMoviesShows.vue").default
+    },
+    {
+        path: "/show/:id",
+        component: require("./components/MovieDetailComponent.vue").default
+    }
+];
+const router = new VueRouter({
+    routes,
+    mode: "history"
+});
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -30,5 +49,6 @@ Vue.component(
  */
 
 const app = new Vue({
-    el: "#app"
+    el: "#app",
+    router
 });
