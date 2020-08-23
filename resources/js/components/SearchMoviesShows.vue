@@ -94,7 +94,6 @@ export default {
     // },
     methods: {
         shortenDescription(text, len = 200) {
-            console.log(text);
             if (text.length > len) return `${text.slice(0, len)}...`;
             return text;
         },

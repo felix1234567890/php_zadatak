@@ -9,8 +9,8 @@
         <div class="col-md-6">
             <img
                 :src="
-                    movie.poster_path
-                        ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+                    movieOrShow.poster_path
+                        ? `https://image.tmdb.org/t/p/w500/${movieOrShow.poster_path}`
                         : 'http://via.placeholder.com/500x750'
                 "
             />
@@ -18,56 +18,78 @@
         <div class="col-md-6">
             <p>
                 <strong>Title:</strong>
-                {{ movie.title }}
+                {{ movieOrShow.title || movieOrShow.name }}
             </p>
-            <div v-if="movie.title !== movie.original_title">
+            <div v-if="movieOrShow.title !== movieOrShow.original_title">
                 <p>
                     <strong>Original title:</strong>
-                    {{ movie.original_title }}
+                    {{ movieOrShow.original_title }}
                 </p>
             </div>
-            <div v-if="movie.original_language !== 'en'">
+            <div v-if="movieOrShow.original_language !== 'en'">
                 <p>
                     <strong>Original language:</strong>
-                    {{ movie.original_language }}
+                    {{ movieOrShow.original_language }}
                 </p>
             </div>
             <p>
                 <strong>Description:</strong>
-                {{ movie.overview }}
+                {{ movieOrShow.overview }}
             </p>
             <p>
                 <strong>Genres:</strong>
-                {{ movie.genres && movie.genres.join(", ") }}
+                {{ movieOrShow.genres && movieOrShow.genres.join(", ") }}
             </p>
-            <p>
+            <p v-if="movieOrShow.created_by">
+                <strong>Created By:</strong>
+                {{
+                    movieOrShow.created_by && movieOrShow.created_by.join(", ")
+                }}
+            </p>
+            <p v-if="movieOrShow.release_date">
                 <strong>Release date:</strong>
-                {{ movie.release_date }}
+                {{ movieOrShow.release_date }}
             </p>
-            <p>
+            <p v-if="movieOrShow.runtime">
                 <strong>Runtime:</strong>
-                {{ movie.runtime }} mins
+                {{ movieOrShow.runtime }} minutes
+            </p>
+            <p v-if="movieOrShow.episode_run_time">
+                <strong>Runtime:</strong>
+                {{ movieOrShow.episode_run_time[0] }} minutes
+            </p>
+            <p v-if="movieOrShow.number_of_seasons">
+                <strong>Number of seasons:</strong>
+                {{ movieOrShow.number_of_seasons }}
+            </p>
+            <p v-if="movieOrShow.number_of_episodes">
+                <strong>Number of episodes:</strong>
+                {{ movieOrShow.number_of_episodes }}
+            </p>
+            <p v-if="movieOrShow.networks">
+                <strong>Networks:</strong>
+                {{ movieOrShow.networks && movieOrShow.networks.join(", ") }}
             </p>
             <p>
                 <strong>Vote average:</strong>
-                {{ movie.vote_average }}
+                {{ movieOrShow.vote_average }}
             </p>
             <p>
                 <strong>Popularity:</strong>
-                {{ movie.popularity }}
+                {{ movieOrShow.popularity }}
             </p>
             <p>
                 <strong>Production companies:</strong>
                 {{
-                    movie.production_companies &&
-                        movie.production_companies.join(", ")
+                    movieOrShow.production_companies &&
+                        movieOrShow.production_companies.join(", ")
                 }}
             </p>
-            <p>
+            <p v-if="movieOrShow.production_countries">
                 <strong>Production countries:</strong>
                 {{
-                    movie.production_countries &&
-                        movie.production_countries.join(", ")
+                    movieOrShow.production_countries &&
+                        movieOrShow.production_countries.join(", ")
                 }}
             </p>
         </div>
@@ -78,22 +100,31 @@
 export default {
     data() {
         return {
-            movie: {}
+            movieOrShow: {}
         };
     },
     created() {
         axios.get(`/api/details/${this.$route.params.id}`).then(response => {
-            console.log(response.data);
-            response.data.genres = response.data.genres.map(
+            console.log(response.data[0]);
+            if (response.data.type === "movie") {
+                response.data[0].production_countries = response.data[0].production_countries.map(
+                    country => country.name
+                );
+            } else {
+                response.data[0].created_by = response.data[0].created_by.map(
+                    author => author.name
+                );
+                response.data[0].networks = response.data[0].networks.map(
+                    network => network.name
+                );
+            }
+            response.data[0].genres = response.data[0].genres.map(
                 genre => genre.name
             );
-            response.data.production_companies = response.data.production_companies.map(
+            response.data[0].production_companies = response.data[0].production_companies.map(
                 company => company.name
             );
-            response.data.production_countries = response.data.production_countries.map(
-                country => country.name
-            );
-            this.movie = response.data;
+            this.movieOrShow = response.data[0];
         });
     }
 };

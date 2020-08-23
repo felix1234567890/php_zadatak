@@ -1984,27 +1984,60 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      movie: {}
+      movieOrShow: {}
     };
   },
   created: function created() {
     var _this = this;
 
     axios.get("/api/details/".concat(this.$route.params.id)).then(function (response) {
-      console.log(response.data);
-      response.data.genres = response.data.genres.map(function (genre) {
+      console.log(response.data[0]);
+
+      if (response.data.type === "movie") {
+        response.data[0].production_countries = response.data[0].production_countries.map(function (country) {
+          return country.name;
+        });
+      } else {
+        response.data[0].created_by = response.data[0].created_by.map(function (author) {
+          return author.name;
+        });
+        response.data[0].networks = response.data[0].networks.map(function (network) {
+          return network.name;
+        });
+      }
+
+      response.data[0].genres = response.data[0].genres.map(function (genre) {
         return genre.name;
       });
-      response.data.production_companies = response.data.production_companies.map(function (company) {
+      response.data[0].production_companies = response.data[0].production_companies.map(function (company) {
         return company.name;
       });
-      response.data.production_countries = response.data.production_countries.map(function (country) {
-        return country.name;
-      });
-      _this.movie = response.data;
+      _this.movieOrShow = response.data[0];
     });
   }
 });
@@ -2116,7 +2149,6 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     shortenDescription: function shortenDescription(text) {
       var len = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 200;
-      console.log(text);
       if (text.length > len) return "".concat(text.slice(0, len), "...");
       return text;
     },
@@ -10331,8 +10363,8 @@ var render = function() {
     _c("div", { staticClass: "col-md-6" }, [
       _c("img", {
         attrs: {
-          src: _vm.movie.poster_path
-            ? "https://image.tmdb.org/t/p/w500/" + _vm.movie.poster_path
+          src: _vm.movieOrShow.poster_path
+            ? "https://image.tmdb.org/t/p/w500/" + _vm.movieOrShow.poster_path
             : "http://via.placeholder.com/500x750"
         }
       })
@@ -10341,29 +10373,33 @@ var render = function() {
     _c("div", { staticClass: "col-md-6" }, [
       _c("p", [
         _c("strong", [_vm._v("Title:")]),
-        _vm._v("\n            " + _vm._s(_vm.movie.title) + "\n        ")
+        _vm._v(
+          "\n            " +
+            _vm._s(_vm.movieOrShow.title || _vm.movieOrShow.name) +
+            "\n        "
+        )
       ]),
       _vm._v(" "),
-      _vm.movie.title !== _vm.movie.original_title
+      _vm.movieOrShow.title !== _vm.movieOrShow.original_title
         ? _c("div", [
             _c("p", [
               _c("strong", [_vm._v("Original title:")]),
               _vm._v(
                 "\n                " +
-                  _vm._s(_vm.movie.original_title) +
+                  _vm._s(_vm.movieOrShow.original_title) +
                   "\n            "
               )
             ])
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm.movie.original_language !== "en"
+      _vm.movieOrShow.original_language !== "en"
         ? _c("div", [
             _c("p", [
               _c("strong", [_vm._v("Original language:")]),
               _vm._v(
                 "\n                " +
-                  _vm._s(_vm.movie.original_language) +
+                  _vm._s(_vm.movieOrShow.original_language) +
                   "\n            "
               )
             ])
@@ -10372,36 +10408,117 @@ var render = function() {
       _vm._v(" "),
       _c("p", [
         _c("strong", [_vm._v("Description:")]),
-        _vm._v("\n            " + _vm._s(_vm.movie.overview) + "\n        ")
+        _vm._v(
+          "\n            " + _vm._s(_vm.movieOrShow.overview) + "\n        "
+        )
       ]),
       _vm._v(" "),
       _c("p", [
         _c("strong", [_vm._v("Genres:")]),
         _vm._v(
           "\n            " +
-            _vm._s(_vm.movie.genres && _vm.movie.genres.join(", ")) +
+            _vm._s(
+              _vm.movieOrShow.genres && _vm.movieOrShow.genres.join(", ")
+            ) +
             "\n        "
         )
       ]),
       _vm._v(" "),
-      _c("p", [
-        _c("strong", [_vm._v("Release date:")]),
-        _vm._v("\n            " + _vm._s(_vm.movie.release_date) + "\n        ")
-      ]),
+      _vm.movieOrShow.created_by
+        ? _c("p", [
+            _c("strong", [_vm._v("Created By:")]),
+            _vm._v(
+              "\n            " +
+                _vm._s(
+                  _vm.movieOrShow.created_by &&
+                    _vm.movieOrShow.created_by.join(", ")
+                ) +
+                "\n        "
+            )
+          ])
+        : _vm._e(),
       _vm._v(" "),
-      _c("p", [
-        _c("strong", [_vm._v("Runtime:")]),
-        _vm._v("\n            " + _vm._s(_vm.movie.runtime) + " mins\n        ")
-      ]),
+      _vm.movieOrShow.release_date
+        ? _c("p", [
+            _c("strong", [_vm._v("Release date:")]),
+            _vm._v(
+              "\n            " +
+                _vm._s(_vm.movieOrShow.release_date) +
+                "\n        "
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.movieOrShow.runtime
+        ? _c("p", [
+            _c("strong", [_vm._v("Runtime:")]),
+            _vm._v(
+              "\n            " +
+                _vm._s(_vm.movieOrShow.runtime) +
+                " minutes\n        "
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.movieOrShow.episode_run_time
+        ? _c("p", [
+            _c("strong", [_vm._v("Runtime:")]),
+            _vm._v(
+              "\n            " +
+                _vm._s(_vm.movieOrShow.episode_run_time[0]) +
+                " minutes\n        "
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.movieOrShow.number_of_seasons
+        ? _c("p", [
+            _c("strong", [_vm._v("Number of seasons:")]),
+            _vm._v(
+              "\n            " +
+                _vm._s(_vm.movieOrShow.number_of_seasons) +
+                "\n        "
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.movieOrShow.number_of_episodes
+        ? _c("p", [
+            _c("strong", [_vm._v("Number of episodes:")]),
+            _vm._v(
+              "\n            " +
+                _vm._s(_vm.movieOrShow.number_of_episodes) +
+                "\n        "
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.movieOrShow.networks
+        ? _c("p", [
+            _c("strong", [_vm._v("Networks:")]),
+            _vm._v(
+              "\n            " +
+                _vm._s(
+                  _vm.movieOrShow.networks &&
+                    _vm.movieOrShow.networks.join(", ")
+                ) +
+                "\n        "
+            )
+          ])
+        : _vm._e(),
       _vm._v(" "),
       _c("p", [
         _c("strong", [_vm._v("Vote average:")]),
-        _vm._v("\n            " + _vm._s(_vm.movie.vote_average) + "\n        ")
+        _vm._v(
+          "\n            " + _vm._s(_vm.movieOrShow.vote_average) + "\n        "
+        )
       ]),
       _vm._v(" "),
       _c("p", [
         _c("strong", [_vm._v("Popularity:")]),
-        _vm._v("\n            " + _vm._s(_vm.movie.popularity) + "\n        ")
+        _vm._v(
+          "\n            " + _vm._s(_vm.movieOrShow.popularity) + "\n        "
+        )
       ]),
       _vm._v(" "),
       _c("p", [
@@ -10409,24 +10526,26 @@ var render = function() {
         _vm._v(
           "\n            " +
             _vm._s(
-              _vm.movie.production_companies &&
-                _vm.movie.production_companies.join(", ")
+              _vm.movieOrShow.production_companies &&
+                _vm.movieOrShow.production_companies.join(", ")
             ) +
             "\n        "
         )
       ]),
       _vm._v(" "),
-      _c("p", [
-        _c("strong", [_vm._v("Production countries:")]),
-        _vm._v(
-          "\n            " +
-            _vm._s(
-              _vm.movie.production_countries &&
-                _vm.movie.production_countries.join(", ")
-            ) +
-            "\n        "
-        )
-      ])
+      _vm.movieOrShow.production_countries
+        ? _c("p", [
+            _c("strong", [_vm._v("Production countries:")]),
+            _vm._v(
+              "\n            " +
+                _vm._s(
+                  _vm.movieOrShow.production_countries &&
+                    _vm.movieOrShow.production_countries.join(", ")
+                ) +
+                "\n        "
+            )
+          ])
+        : _vm._e()
     ])
   ])
 }
