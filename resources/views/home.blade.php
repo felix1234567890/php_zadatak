@@ -14,16 +14,19 @@
 </head>
 
 <body>
-
     <div class="container-md" id="app">
-<search-component></search-component>
+        <search-component></search-component>
         <div class="row">
             @foreach($items as $item)
             <div class="col-md-4 mt-5">
                 <div class="card" style="width: 18rem;">
-                    <img src="{{ $item['poster_path'] }}" class="card-img-top" alt="...">
+                <a href="{{route('home.show', $item['id'])}}">
+                <img src="{{ $item['poster_path'] }}" class="card-img-top" alt="...">
+                </a>
+                   
                     <div class="card-body">
-                        <h5 class="card-title">{{$item['title']}}</h5>
+                    <a href="{{route('home.show', $item['id'])}}">
+                        <h5 class="card-title">{{$item['title']}}</h5></a>
                         <p class="card-text">
                             @if(strlen($item['description'])>150)
                             {{substr(strip_tags($item['description']),0,150)}}...
@@ -36,12 +39,8 @@
             </div>
             @endforeach
         </div>
-        <div id="app">
-        <example-component></example-component>
-        </div>
-     
     </div>
-<script src="{{asset('js/app.js') }}"></script>
+    <script src="{{asset('js/app.js') }}"></script>
 </body>
 
 </html>

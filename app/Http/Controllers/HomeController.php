@@ -29,6 +29,7 @@ class HomeController extends Controller
                 return [$value => $this->genres($this->genres)->get($value)];
             })->implode(', ');
             return [
+                "id" => $movie['id'],
                 "title" => $movie['title'],
                 "description" => $movie['overview'],
                 "release_date" => $movie['release_date'],
@@ -46,6 +47,7 @@ class HomeController extends Controller
                 return [$value => $this->genres($this->genres)->get($value)];
             })->implode(', ');
             return [
+                "id" => $show['id'],
                 "title" => $show['name'],
                 "description" => $show['overview'],
                 "release_date" => $show['first_air_date'],
@@ -67,6 +69,10 @@ class HomeController extends Controller
         //     MovieShow::create($show);
         // }
 
-        return view('welcome',['items' => $data]);
+        return view('home',['items' => $data]);
+    }
+    public function show($movieId)
+    {
+    return view('show', ['id' => $movieId]);
     }
 }
