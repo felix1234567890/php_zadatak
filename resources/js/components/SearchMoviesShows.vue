@@ -7,11 +7,16 @@
                 placeholder="Search movies or tv shows"
                 aria-label="Username"
                 aria-describedby="addon-wrapping"
-                v-model="searchTerm"
+                :value="searchTerm"
+                @input="updateSearchTerm"
             />
 
             <span class="input-group-text">
-                <select class="form-select" v-model="type">
+                <select
+                    class="form-select"
+                    :value="type"
+                    @input="updateSearchType"
+                >
                     <option value="both" selected>Movies + TV-Shows</option>
                     <option value="movies">Movies</option>
                     <option value="shows">Tv-Shows</option>
@@ -52,47 +57,13 @@
 </template>
 
 <script>
+import { mapMutations, mapState } from "vuex";
 export default {
-    data() {
-        return {
-            searchTerm: "",
-            type: "both",
-            searchData: []
-        };
+    computed: {
+        ...mapState(["searchData", "searchTerm", "type"])
     },
-    // watch: {
-    // searchTerm(value) {
-    //     if (value.length < 3) {
-    //         this.searchData = [];
-    //         return;
-    //     }
-    //     axios
-    //         .get("/api/search", {
-    //             params: { searchTerm: this.searchTerm, type: this.type }
-    //         })
-    //         .then(response => {
-    //             console.log(response.data);
-    //             this.searchData = response.data;
-    //         })
-    //         .catch(error => console.log(error));
-    // },
-    // type(value) {
-    //     if (this.searchTerm.length < 3) {
-    //         this.searchData = [];
-    //         return;
-    //     }
-    //     axios
-    //         .get("/api/search", {
-    //             params: { searchTerm: this.searchTerm, type: this.type }
-    //         })
-    //         .then(response => {
-    //             console.log(response.datad);
-    //             this.searchData = response.data;
-    //         })
-    //         .catch(error => console.log(error));
-    // }
-    // },
     methods: {
+        ...mapMutations(["setSearchData", "setSearchTerm", "setSearchType"]),
         shortenDescription(text, len = 200) {
             if (text.length > len) return `${text.slice(0, len)}...`;
             return text;
@@ -105,9 +76,15 @@ export default {
                     params: { searchTerm: this.searchTerm, type: this.type }
                 })
                 .then(response => {
-                    this.searchData = response.data;
+                    this.setSearchData(response.data);
                 })
                 .catch(error => console.log(error));
+        },
+        updateSearchTerm(e) {
+            this.setSearchTerm(e.target.value);
+        },
+        updateSearchType(e) {
+            this.setSearchType(e.target.value);
         }
     }
 };

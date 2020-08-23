@@ -6,9 +6,30 @@
 
 require("./bootstrap");
 import VueRouter from "vue-router";
+import Vuex from "vuex";
 
 window.Vue = require("vue");
 Vue.use(VueRouter);
+Vue.use(Vuex);
+
+const store = new Vuex.Store({
+    state: {
+        searchData: [],
+        searchTerm: "",
+        type: "both"
+    },
+    mutations: {
+        setSearchData(state, data) {
+            state.searchData = data;
+        },
+        setSearchTerm(state, term) {
+            state.searchTerm = term;
+        },
+        setSearchType(state, type) {
+            state.type = type;
+        }
+    }
+});
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -50,5 +71,6 @@ const router = new VueRouter({
 
 const app = new Vue({
     el: "#app",
+    store,
     router
 });
