@@ -6,16 +6,17 @@
             </router-link>
         </span>
 
-        <div class="col-md-6">
+        <div class="col-xs-12 col-sm-6">
             <img
                 :src="
                     movieOrShow.poster_path
                         ? `https://image.tmdb.org/t/p/w500/${movieOrShow.poster_path}`
                         : 'http://via.placeholder.com/500x750'
                 "
+                class="poster-img"
             />
         </div>
-        <div class="col-md-6">
+        <div class="col-xs-12 col-sm-6">
             <p>
                 <strong>Title:</strong>
                 {{ movieOrShow.title || movieOrShow.name }}
@@ -105,7 +106,6 @@ export default {
     },
     created() {
         axios.get(`/api/details/${this.$route.params.id}`).then(response => {
-            console.log(response.data[0]);
             if (response.data.type === "movie") {
                 response.data[0].production_countries = response.data[0].production_countries.map(
                     country => country.name
@@ -130,4 +130,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+@media (min-width: 576px) {
+    .poster-img {
+        height: 100%;
+        width: 36vw;
+        max-width: 600px;
+    }
+}
+</style>

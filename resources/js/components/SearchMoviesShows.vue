@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="input-group flex-nowrap py-5">
+        <div class="input-group flex-nowrap pt-5 pb-3">
             <input
                 type="text"
                 class="form-control"
@@ -32,11 +32,11 @@
         </div>
         <div class="row" v-else>
             <div
-                class="col-md-4 col-sm-6 align-self-center"
+                class="col-xs-12 col-sm-6 col-md-4 align-self-center"
                 v-for="item in searchData"
                 :key="item.id"
             >
-                <div class="card h-100 m-2">
+                <div class="card m-2">
                     <router-link :to="`/show/${item.id}`">
                         <img :src="item.poster_path" class="card-img-top" />
                     </router-link>
@@ -90,4 +90,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.card-img-top {
+    width: 100%;
+    height: 30vw;
+    object-fit: cover;
+}
+</style>
