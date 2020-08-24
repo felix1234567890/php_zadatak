@@ -5,7 +5,7 @@
 3. Run `docker-compose build app`
 4. Run `docker-compose up -d`
 5. Run `docker-compose exec app composer install`
-6. Run `docker-compose exec app php artisan key:generate`
+6. Run `docker-compose exec db mysql -u root` with your password to enter mysql shell and then run `create database movies;`
 7. Run `docker-compose exec app php artisan migrate`
 8. Run `docker-compose exec app npm install && npm run dev`
 9. Open application on `http://localhost:8000`
