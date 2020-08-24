@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\MovieShow;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
@@ -36,7 +35,7 @@ class HomeController extends Controller
      * description="Data retrieved from an external API",
      * @OA\JsonContent(
      *  @OA\Property(property="movie-show",type="array",
-     * @OA\Items(ref="#/components/schemas/MovieShow")),
+     *  @OA\Items(ref="#/components/schemas/MovieShow")),
      * )
      * )
      * )
@@ -62,14 +61,11 @@ class HomeController extends Controller
             switch ($type) {
                 case "both":
                     $searchMovies = Http::withToken(env('API_TOKEN'))->get($this->baseUrl . Config::get('constants.search_movies') . $searchTerm)->json()['results'];
-                    // $movies = array_slice($searchMovies, 0, 10);
                     $movies = $this->transformMovies($searchMovies);
                     $searchTVShows = Http::withToken(env('API_TOKEN'))->get($this->baseUrl . Config::get('constants.search_shows') . $searchTerm)->json()['results'];
-                    // $tvShows = array_slice($searchTVShows, 0, 10);
                     $shows = $this->transformTvShows($searchTVShows);
                     $searchItems = array_merge($movies->all(), $shows->all());
                     shuffle($searchItems);
-                    // $this->moviesOrShows = $searchItems;
                     foreach ($searchItems as $movieOrShow) {
                         $item = MovieShow::create($movieOrShow);
                         array_push($this->moviesOrShows, $item->getOriginal());
@@ -78,7 +74,6 @@ class HomeController extends Controller
                 case "movies":
                     $movies =  Http::withToken(env('API_TOKEN'))->get($this->baseUrl . Config::get('constants.search_movies') . $searchTerm)->json()['results'];
                     $movies = $this->transformMovies($movies);
-                    // $this->moviesOrShows = $movies;
                     foreach ($movies as $movie) {
                         $item = MovieShow::create($movie);
                         dump($item->getOriginal());
@@ -88,7 +83,6 @@ class HomeController extends Controller
                 case "shows":
                     $shows = Http::withToken(env('API_TOKEN'))->get($this->baseUrl . Config::get('constants.search_shows') . $searchTerm)->json()['results'];
                     $shows = $this->transformTvShows($shows);
-                    // $this->moviesOrShows = $shows;
                     foreach ($shows as $show) {
                         $item = MovieShow::create($show);
                         array_push($this->moviesOrShows, $item->getOriginal());
@@ -98,7 +92,6 @@ class HomeController extends Controller
                     break;
             }
         }
-
         return $this->moviesOrShows;
     }
     /**
